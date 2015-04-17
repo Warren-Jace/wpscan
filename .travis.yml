@@ -10,6 +10,10 @@ rvm:
   - 2.1.4
   - 2.1.5
   - 2.2.0
+  - 2.2.1
+  - 2.2.2
+before_install:
+  - "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
 script: bundle exec rspec
 notifications:
   email:
@@ -17,3 +21,7 @@ notifications:
 matrix:
   allow_failures:
     - rvm: 1.9.2
+# do not build gh-pages branch
+branches:
+  except:
+    - gh-pages

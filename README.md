@@ -89,10 +89,11 @@ WPScan comes pre-installed on the following Linux distributions:
 - [Pentoo](http://www.pentoo.ch/)
 - [SamuraiWTF](http://samurai.inguardians.com/)
 - [ArchAssault](https://archassault.org/)
+- [BlackArch](http://blackarch.org/)
 
 Prerequisites:
 
-- Ruby >= 1.9.2 - Recommended: 2.2.0
+- Ruby >= 1.9.2 - Recommended: 2.2.2
 - Curl >= 7.21  - Recommended: latest - FYI the 7.29 has a segfault
 - RubyGems      - Recommended: latest
 - Git
@@ -155,8 +156,8 @@ Apple Xcode, Command Line Tools and the libffi are needed (to be able to install
     curl -sSL https://get.rvm.io | bash -s stable
     source ~/.rvm/scripts/rvm
     echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc
-    rvm install 2.2.0
-    rvm use 2.2.0 --default
+    rvm install 2.2.2
+    rvm use 2.2.2 --default
     echo "gem: --no-ri --no-rdoc" > ~/.gemrc
     gem install bundler
     git clone https://github.com/wpscanteam/wpscan.git
@@ -309,21 +310,6 @@ Update WPScan's databases...
 Debug output...
 
 ```ruby wpscan.rb --url www.example.com --debug-output 2>debug.log```
-
-#### WPSTOOLS ARGUMENTS
-
-    -v, --verbose                                                Verbose output
-        --check-vuln-ref-urls, --cvru                            Check all the vulnerabilities reference urls for 404
-        --check-local-vulnerable-files, --clvf LOCAL_DIRECTORY   Perform a recursive scan in the LOCAL_DIRECTORY to find vulnerable files or shells
-    -s, --stats                                                  Show WpScan Database statistics.
-        --spellcheck, --sc                                       Check all files for common spelling mistakes.
-
-
-#### WPSTOOLS EXAMPLES
-
-Locally scan a wordpress installation for vulnerable files or shells:
-
-```ruby wpstools.rb --check-local-vulnerable-files /var/www/wordpress/```
 
 #### PROJECT HOME
 
