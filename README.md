@@ -38,7 +38,7 @@ Example cases which do not require a commercial license, and thus fall under the
  - Using WPScan to test your own systems.
  - Any non-commercial use of WPScan.
 
-If you need to purchase a commercial license or are unsure whether you need to purchase a commercial license contact us - wpscanteam@gmail.com. 
+If you need to purchase a commercial license or are unsure whether you need to purchase a commercial license contact us - team@wpscan.org.
 
 We may grant commercial licenses at no monetary cost at our own discretion if the commercial usage is deemed by the WPScan Team to significantly benefit WPScan.
 
@@ -88,12 +88,11 @@ WPScan comes pre-installed on the following Linux distributions:
 - [Kali Linux](http://www.kali.org/)
 - [Pentoo](http://www.pentoo.ch/)
 - [SamuraiWTF](http://samurai.inguardians.com/)
-- [ArchAssault](https://archassault.org/)
 - [BlackArch](http://blackarch.org/)
 
 Prerequisites:
 
-- Ruby >= 1.9.2 - Recommended: 2.2.2
+- Ruby >= 1.9.2 - Recommended: 2.2.3
 - Curl >= 7.21  - Recommended: latest - FYI the 7.29 has a segfault
 - RubyGems      - Recommended: latest
 - Git
@@ -105,21 +104,21 @@ If installed from Github update the code base with ```git pull```. The databases
 
 Before Ubuntu 14.04:
 
-    sudo apt-get install libcurl4-gnutls-dev libopenssl-ruby libxml2 libxml2-dev libxslt1-dev ruby-dev
+    sudo apt-get install libcurl4-openssl-dev libopenssl-ruby libxml2 libxml2-dev libxslt1-dev ruby-dev
     git clone https://github.com/wpscanteam/wpscan.git
     cd wpscan
     sudo gem install bundler && bundle install --without test
 
 From Ubuntu 14.04:
 
-    sudo apt-get install libcurl4-gnutls-dev libxml2 libxml2-dev libxslt1-dev ruby-dev build-essential
+    sudo apt-get install libcurl4-openssl-dev libxml2 libxml2-dev libxslt1-dev ruby-dev build-essential libgmp-dev
     git clone https://github.com/wpscanteam/wpscan.git
     cd wpscan
     sudo gem install bundler && bundle install --without test
 
 ####Installing on Debian:
 
-    sudo apt-get install git ruby ruby-dev libcurl4-gnutls-dev make
+    sudo apt-get install git ruby ruby-dev libcurl4-openssl-dev make
     git clone https://github.com/wpscanteam/wpscan.git
     cd wpscan
     sudo gem install bundler
@@ -150,18 +149,19 @@ Apple Xcode, Command Line Tools and the libffi are needed (to be able to install
     cd wpscan
     sudo gem install bundler && sudo bundle install --without test
 
-####Installing with RVM:
+####Installing with RVM (recommended):
 
     cd ~
     curl -sSL https://get.rvm.io | bash -s stable
     source ~/.rvm/scripts/rvm
     echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc
-    rvm install 2.2.2
-    rvm use 2.2.2 --default
+    rvm install 2.2.3
+    rvm use 2.2.3 --default
     echo "gem: --no-ri --no-rdoc" > ~/.gemrc
     gem install bundler
     git clone https://github.com/wpscanteam/wpscan.git
     cd wpscan
+    gem install bundler
     bundle install --without test
 
 #### KNOWN ISSUES
@@ -209,13 +209,10 @@ Apple Xcode, Command Line Tools and the libffi are needed (to be able to install
 
 #### WPSCAN ARGUMENTS
 
-    --update   Update the databases.
-
-    --url   | -u <target url>  The WordPress URL/domain to scan.
-
-    --force | -f Forces WPScan to not check if the remote site is running WordPress.
-
-    --enumerate | -e [option(s)]  Enumeration.
+    --update                            Update the database to the latest version.
+    --url       | -u <target url>       The WordPress URL/domain to scan.
+    --force     | -f                    Forces WPScan to not check if the remote site is running WordPress.
+    --enumerate | -e [option(s)]        Enumeration.
       option :
         u        usernames from id 1 to 10
         u[10-20] usernames from id 10 to 20 (you must write [] chars)
@@ -229,53 +226,36 @@ Apple Xcode, Command Line Tools and the libffi are needed (to be able to install
       Multiple values are allowed : "-e tt,p" will enumerate timthumbs and plugins
       If no option is supplied, the default is "vt,tt,u,vp"
 
-    --exclude-content-based "<regexp or string>" Used with the enumeration option, will exclude all occurrences based on the regexp or string supplied
-                                                 You do not need to provide the regexp delimiters, but you must write the quotes (simple or double)
-
-    --config-file | -c <config file> Use the specified config file, see the example.conf.json
-
-    --user-agent | -a <User-Agent> Use the specified User-Agent
-
-    --random-agent | -r Use a random User-Agent
-
-    --follow-redirection  If the target url has a redirection, it will be followed without asking if you wanted to do so or not
-
-    --wp-content-dir <wp content dir>  WPScan try to find the content directory (ie wp-content) by scanning the index page, however you can specified it. Subdirectories are allowed
-
-    --wp-plugins-dir <wp plugins dir>  Same thing than --wp-content-dir but for the plugins directory. If not supplied, WPScan will use wp-content-dir/plugins. Subdirectories are allowed
-
-    --proxy <[protocol://]host:port> Supply a proxy (will override the one from conf/browser.conf.json).
-                                     HTTP, SOCKS4 SOCKS4A and SOCKS5 are supported. If no protocol is given (format host:port), HTTP will be used
-
-    --proxy-auth <username:password>  Supply the proxy login credentials.
-
-    --basic-auth <username:password>  Set the HTTP Basic authentication.
-
-    --wordlist | -w <wordlist>  Supply a wordlist for the password brute forcer.
-
-    --threads  | -t <number of threads>  The number of threads to use when multi-threading requests.
-
-    --username | -U <username>  Only brute force the supplied username.
-
-    --usernames  <path-to-file>  Only brute force the usernames from the file.
-
-    --cache-ttl <cache-ttl>  Typhoeus cache TTL.
-
-    --request-timeout <request-timeout>  Request Timeout.
-
-    --connect-timeout <connect-timeout>  Connect Timeout.
-
-    --max-threads <max-threads>  Maximum Threads.
-
-    --help     | -h This help screen.
-
-    --verbose  | -v Verbose output.
-
-    --batch Never ask for user input, use the default behavior.
-
-    --no-color Do not use colors in the output.
-
-    --log Save STDOUT to log.txt
+    --exclude-content-based "<regexp or string>"
+                                        Used with the enumeration option, will exclude all occurrences based on the regexp or string supplied.
+                                        You do not need to provide the regexp delimiters, but you must write the quotes (simple or double).
+    --config-file  | -c <config file>   Use the specified config file, see the example.conf.json.
+    --user-agent   | -a <User-Agent>    Use the specified User-Agent.
+    --cookie <String>                   String to read cookies from.
+    --random-agent | -r                 Use a random User-Agent.
+    --follow-redirection                If the target url has a redirection, it will be followed without asking if you wanted to do so or not
+    --batch                             Never ask for user input, use the default behaviour.
+    --no-color                          Do not use colors in the output.
+    --wp-content-dir <wp content dir>   WPScan try to find the content directory (ie wp-content) by scanning the index page, however you can specified it.
+                                        Subdirectories are allowed.
+    --wp-plugins-dir <wp plugins dir>   Same thing than --wp-content-dir but for the plugins directory.
+                                        If not supplied, WPScan will use wp-content-dir/plugins. Subdirectories are allowed
+    --proxy <[protocol://]host:port>    Supply a proxy. HTTP, SOCKS4 SOCKS4A and SOCKS5 are supported.
+                                        If no protocol is given (format host:port), HTTP will be used.
+    --proxy-auth <username:password>    Supply the proxy login credentials.
+    --basic-auth <username:password>    Set the HTTP Basic authentication.
+    --wordlist | -w <wordlist>          Supply a wordlist for the password brute forcer.
+    --username | -U <username>          Only brute force the supplied username.
+    --usernames     <path-to-file>      Only brute force the usernames from the file.
+    --threads  | -t <number of threads> The number of threads to use when multi-threading requests.
+    --cache-ttl       <cache-ttl>       Typhoeus cache TTL.
+    --request-timeout <request-timeout> Request Timeout.
+    --connect-timeout <connect-timeout> Connect Timeout.
+    --max-threads     <max-threads>     Maximum Threads.
+    --throttle        <milliseconds>    Milliseconds to wait before doing another web request. If used, the --threads should be set to 1.
+    --help     | -h                     This help screen.
+    --verbose  | -v                     Verbose output.
+    --version                           Output the current version and exit.
 
 #### WPSCAN EXAMPLES
 
@@ -317,7 +297,7 @@ Debug output...
 
 #### VULNERABILITY DATABASE
 
-[https://www.wpvulndb.com](https://www.wpvulndb.com)
+[https://wpvulndb.com](https://wpvulndb.com)
 
 #### GIT REPOSITORY
 

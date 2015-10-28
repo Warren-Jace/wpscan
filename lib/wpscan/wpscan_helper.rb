@@ -62,7 +62,7 @@ def help
   puts
   puts 'Some values are settable in a config file, see the example.conf.json'
   puts
-  puts '--update                            Update to the database to the latest version.'
+  puts '--update                            Update the database to the latest version.'
   puts '--url       | -u <target url>       The WordPress URL/domain to scan.'
   puts '--force     | -f                    Forces WPScan to not check if the remote site is running WordPress.'
   puts '--enumerate | -e [option(s)]        Enumeration.'
@@ -105,6 +105,7 @@ def help
   puts '--request-timeout <request-timeout> Request Timeout.'
   puts '--connect-timeout <connect-timeout> Connect Timeout.'
   puts '--max-threads     <max-threads>     Maximum Threads.'
+  puts '--throttle        <milliseconds>    Milliseconds to wait before doing another web request. If used, the --threads should be set to 1.'
   puts '--help     | -h                     This help screen.'
   puts '--verbose  | -v                     Verbose output.'
   puts '--version                           Output the current version and exit.'
@@ -118,8 +119,14 @@ down                 = 0
 @total_requests_done = 0
 
 Typhoeus.on_complete do |response|
+  next if response.cached?
+
   down += 1 if response.code == 0
   @total_requests_done += 1
 
   fail 'The target seems to be down' if down >= 30
+
+  next unless Browser.instance.throttle > 0
+
+  sleep(Browser.instance.throttle)
 end

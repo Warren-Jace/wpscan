@@ -28,8 +28,13 @@ class WpTarget < WebSite
     @wp_content_dir = options[:wp_content_dir]
     @wp_plugins_dir = options[:wp_plugins_dir]
     @multisite      = nil
+    @vhost = options[:vhost]
 
     Browser.instance.referer = url
+    if @vhost
+      Browser.instance.vhost = @vhost
+    end
+
   end
 
   # check if the target website is
@@ -44,11 +49,7 @@ class WpTarget < WebSite
     fail "The target is responding with a 403, this might be due to a WAF or a plugin.\n" \
           'You should try to supply a valid user-agent via the --user-agent option or use the --random-agent option' if response.code == 403
 
-    if wp_content_dir
-      dir = wp_content_dir
-    else
-      dir = 'wp-content'
-    end
+    dir = wp_content_dir ? wp_content_dir : 'wp-content'
 
     if response.body =~ /["'][^"']*\/#{Regexp.escape(dir)}\/[^"']*["']/i
       wordpress = true

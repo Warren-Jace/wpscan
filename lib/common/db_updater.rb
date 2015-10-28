@@ -4,9 +4,8 @@
 class DbUpdater
   FILES = %w(
     local_vulnerable_files.xml local_vulnerable_files.xsd
-    plugins_full.txt plugins.txt themes_full.txt themes.txt
     timthumbs.txt user-agents.txt wp_versions.xml wp_versions.xsd
-    plugin_vulns.json theme_vulns.json wp_vulns.json LICENSE
+    wordpresses.json plugins.json themes.json LICENSE
   )
 
   attr_reader :repo_directory
@@ -22,7 +21,8 @@ class DbUpdater
   def request_params
     {
       ssl_verifyhost: 2,
-      ssl_verifypeer: true
+      ssl_verifypeer: true,
+      accept_encoding: 'gzip, deflate'
     }
   end
 
@@ -37,7 +37,7 @@ class DbUpdater
 
     res = Browser.get(url, request_params)
     fail DownloadError, res if res.timed_out? || res.code != 200
-    res.body
+    res.body.chomp
   end
 
   def local_file_path(filename)
@@ -112,5 +112,8 @@ class DbUpdater
         end
       end
     end
+
+    # write last_update date to file
+    File.write(LAST_UPDATE_FILE, Time.now)
   end
 end
